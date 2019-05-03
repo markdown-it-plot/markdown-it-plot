@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.2/markdown-it.js"></script>
+    <script src="../dist/markdown-it-plot.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.js"></script>
+    <style>
+        .row {
+            display: flex;
+        }
+
+        .input-wrapper {
+            width: 50%;
+        }
+
+        .result {
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        <div class="input-wrapper">
+            <textarea class="markdown" cols="100" rows="20">```plot
+        plot x,x+1
+        ```</textarea>
+        </div>
+        <div class="result"></div>
+    </div>
+    <div class="row">
+            <div class="input-wrapper">
+                <textarea class="markdown" cols="100" rows="20">```plot
+            plot x ** 2
+            ```</textarea>
+            </div>
+            <div class="result"></div>
+        </div>
+    <div class="row">
+        <div class="input-wrapper">
+            <textarea class="markdown" cols="100" rows="20">```plot
+plot sin(x)
+```</textarea>
+        </div>
+        <div class="result"></div>
+    </div>
+    <script>
+        var markdown = window.markdownit().use(markdownItPlot);
+        $('.row').each((e, d) => {
+            var md = $(d).find('.markdown').val()
+            console.info(md)
+            $(d).find('.result').html(markdown.render(md))
+            $(d).find('.markdown').on('change keyup paste', function (e) {
+                var md = $(d).find('.markdown').val()
+                $(d).find('.result').html(markdown.render(md))
+            })
+        });
+
+    </script>
+</body>
+
+</html>

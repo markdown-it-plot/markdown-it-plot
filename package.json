@@ -1,0 +1,36 @@
+{
+  "name": "markdown-it-plot",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "markdown-it-plugin",
+    "markdown-it",
+    "markdown"
+  ],
+  "main": "lib/index.js",
+  "scripts": {
+    "build-browser": "tsc && browserify -e lib/index.web.js -o dist/markdown-it-plot.js -s markdownItPlot",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/d3": "^5.7.2",
+    "@types/jsdom": "^12.2.3",
+    "@types/markdown-it": "0.0.7",
+    "@types/node": "^11.13.6",
+    "arg": "^4.1.0",
+    "browserify": "^16.2.3",
+    "markdown-it": "^8.4.2",
+    "ts-loader": "^5.4.4",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.4",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
+  },
+  "dependencies": {
+    "d3": "^5.9.2",
+    "linspace": "^1.0.0",
+    "logspace": "^1.0.1"
+  }
+}
