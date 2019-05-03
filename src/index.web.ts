@@ -3,13 +3,14 @@ import { PlotContext } from "./plot-context";
 import { Tokenizer } from "./tokenizer";
 import { Commands } from "./command/commands";
 import * as d3 from "d3"
+import { ParseError } from "./parse-error";
 
 function getLangName(info: string): string {
     return info.split(/\s+/g)[0];
 }
 
 function createContainer() {
-        return document.createElement('div')
+    return document.createElement('div')
 }
 
 export = function plot_plugin(md: MarkdownIt, options: any) {
@@ -39,10 +40,16 @@ export = function plot_plugin(md: MarkdownIt, options: any) {
                         cmd.execute(tokenizer, context)
                     })
             } catch (e) {
-                let $svg = d3.select(context.terminalOptions.container)
-                    .append('svg').attr('xmlns', 'http://www.w3.org/2000/svg').attr("width", 600).attr("height", 400).attr("fill", "#f2dede").attr("stroke", "#eed3d7")
-                $svg.append("g").attr("x", 50).attr("y", 50).attr("width", 500).attr("height", 300)
-                    .append('text').text("绘图失败").style("color:#b94a48")
+                let container = d3.select(context.terminalOptions.container).html("")
+                let box = container.append('div').attr("width", 600).attr("height", 400).attr("style", "backgroud-color:#f2dede; border:#eed3d7 solid 1px; color:#b94a48")
+                if (typeof (e) == "string") {
+                    box.append("绘图失败：" + e)
+                } else if (e instanceof ParseError) {
+                    box.append('pre').text(e.render())
+                } else {
+                    box.append('pre').text(JSON.stringify(e))
+                    throw e;
+                }
 
             }
 

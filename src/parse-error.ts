@@ -23,4 +23,19 @@ export class ParseError extends Error {
     static formTokens(text: string, token1: Token, token2: Token, message: string): ParseError {
         return this.of(text, message, token1.start, token2.start - token1.start + token2.text.length)
     }
+
+    render(): string {
+        let mark = "";
+        this.length = this.length || 1
+        if (this.text) {
+            for (let i = 0; i < Math.max(this.text.length, this.start) + 1; i++) {
+                if (i >= this.start && i < this.start + this.length) {
+                    mark = mark + '^'
+                } else {
+                    mark = mark + ' '
+                }
+            }
+        }
+        return `${this.message}${this.text ? '\n' + this.text : ''}${mark ? '\n' + mark : ""}`
+    }
 }

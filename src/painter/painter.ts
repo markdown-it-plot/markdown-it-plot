@@ -2,6 +2,8 @@ import { PlotContext } from "../plot-context";
 import * as d3 from 'd3'
 import { ExpressionObject } from "../objects/expression-object";
 import { ValueType, Value } from "../tokenizer";
+import { LineStyles } from "../styles";
+import { Colors } from "../colors";
 let linspace = require('linspace')
 
 export interface Painter {
@@ -35,6 +37,7 @@ export class SVGPainter implements Painter {
 
     paintObjects() {
         let objects = PlotContext.get().objects
+        LineStyles.reset()
         objects.forEach((o) => {
             if (o instanceof ExpressionObject) {
                 this.paintExpression(o)
@@ -53,7 +56,8 @@ export class SVGPainter implements Painter {
                 return this.y1axis.scale()(r.num_v)
             })
             .curve(d3.curveBasis)
-        this.$svg.append('path').attr('d', gen(samples)).attr('stroke', 'red').attr('fill','none')
+        let color = Colors.get(LineStyles.next().color);
+        this.$svg.append('path').attr('d', gen(samples)).attr('stroke', color).attr('fill', 'none')
     }
 
 
