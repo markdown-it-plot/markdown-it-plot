@@ -1090,7 +1090,7 @@ export class ExpressionParser {
     }
 
     throwTokenError(message: string, token?: Token): ParseError {
-        throw ParseError.formToken(PlotContext.get().currentCmd, token ? token : this.tokenizer.current() || this.tokenizer.last(), message)
+        throw ParseError.byToken(PlotContext.get().currentCmd, token ? token : this.tokenizer.current() || this.tokenizer.last(), message)
     }
 }
 

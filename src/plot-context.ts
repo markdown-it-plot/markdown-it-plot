@@ -1,6 +1,8 @@
 import { PlotObject } from "./objects/plot-object";
 import { UDV, UDF } from "./tokenizer";
 import { map } from "d3";
+import { ExpressionObject } from "./objects/expression-object";
+import { ArrowObject } from "./objects/arrow";
 
 export class PlotContext {
 
@@ -23,7 +25,14 @@ export class PlotContext {
     dummies: string[] = ['x']
     udfTable: Map<string, UDF> = new Map<string, UDF>()
     udvTable: Map<string, UDV> = new Map<string, UDV>()
-    objects: PlotObject[] = new Array
+    objects = {
+        expression: new Array<ExpressionObject>(),
+        arrow: new Array<ArrowObject>(),
+        shapes: new Array<PlotObject>()
+    }
+
+    
+
 
     image: any
 

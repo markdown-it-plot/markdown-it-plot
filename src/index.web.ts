@@ -36,8 +36,8 @@ export = function plot_plugin(md: MarkdownIt, options: any) {
                     .forEach(l => {
                         context.currentCmd = l
                         let tokenizer = new Tokenizer(l)
-                        let cmd = Commands.createCommand(tokenizer, context)
-                        cmd.execute(tokenizer, context)
+                        let cmd = Commands.createCommand(tokenizer)
+                        cmd.execute()
                     })
             } catch (e) {
                 let container = d3.select(context.terminalOptions.container).html("")

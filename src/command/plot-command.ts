@@ -7,7 +7,7 @@ import { ExpressionObject } from '../objects/expression-object';
 
 export class PlotCommand implements Command {
 
-    constructor(private tokenizer: Tokenizer, private context: PlotContext) { }
+    constructor(private tokenizer: Tokenizer) { }
 
     names(): string[] {
         return ['p', 'plot']
@@ -16,6 +16,7 @@ export class PlotCommand implements Command {
         return 'no help yet.'
     }
     execute(): void {
+
         this.parseAndEvalExpression()
         this.configAxises()
         this.paint()
@@ -23,11 +24,12 @@ export class PlotCommand implements Command {
     }
     parseAndEvalExpression() {
         let exp = new ExpressionParser(this.tokenizer, new UDF({ name: "", dummies: PlotContext.get().dummies })).parse()
-        PlotContext.get().objects.push(new ExpressionObject({ expression: exp }))
+
+        PlotContext.get().objects.expression.push(new ExpressionObject({ expression: exp }))
         while (this.tokenizer.checkEquals(',')) {
             this.tokenizer.forward()
             exp = new ExpressionParser(this.tokenizer, new UDF({ name: "", dummies: PlotContext.get().dummies })).parse()
-            PlotContext.get().objects.push(new ExpressionObject({ expression: exp }))
+            PlotContext.get().objects.expression.push(new ExpressionObject({ expression: exp }))
         }
     }
 
@@ -37,6 +39,6 @@ export class PlotCommand implements Command {
 
     paint() {
         let painter = TerminalFactory.createTerminal().createPainter({})
-        painter.paint(this.context)
+        painter.paint(PlotContext.get())
     }
 }

@@ -38,12 +38,7 @@ export class SVGPainter implements Painter {
     paintObjects() {
         let objects = PlotContext.get().objects
         LineStyles.reset()
-        objects.forEach((o) => {
-            if (o instanceof ExpressionObject) {
-                this.paintExpression(o)
-
-            }
-        })
+        objects.expression.forEach(o => this.paintExpression(o))
     }
 
     paintExpression(obj: ExpressionObject) {

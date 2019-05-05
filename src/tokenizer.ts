@@ -31,7 +31,7 @@ export class UDF {
     }
     name: string
     expression?: Expression
-    dummies?:string[]
+    dummies?: string[]
 }
 
 export class Value {
@@ -245,6 +245,10 @@ export class Tokenizer {
 
     checkForward(step: number, fun: Function) {
         return this.point + step < this.tokens.length && fun(this.tokens[this.point + step])
+    }
+
+    isCommandEnd() {
+        return this.point >= this.tokens.length || this.checkEquals(';')
     }
 
 }

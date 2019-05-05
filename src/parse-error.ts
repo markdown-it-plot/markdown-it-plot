@@ -1,4 +1,4 @@
-import { Token } from "./tokenizer";
+import { Token, Tokenizer } from "./tokenizer";
 
 export class ParseError extends Error {
     text: string
@@ -15,13 +15,21 @@ export class ParseError extends Error {
         return error;
     }
 
-    static formToken(text: string, token: Token, message: string): ParseError {
-        return this.of(text, message, token.start, token.text.length)
+    static byToken(text: string, token: Token, message: string): ParseError {
+        return this.of(text, message, token ? token.start: 0 , token? token.text.length: text.length)
     }
 
 
-    static formTokens(text: string, token1: Token, token2: Token, message: string): ParseError {
+    static byTokens(text: string, token1: Token, token2: Token, message: string): ParseError {
         return this.of(text, message, token1.start, token2.start - token1.start + token2.text.length)
+    }
+
+    static byCurrentToken(tokenizer: Tokenizer, message: string) {
+        return this.byToken(tokenizer.getOrigin(), tokenizer.current(), message)
+    }
+
+    static byCommand(command: string, message: string) {
+        return this.of(command, message, 0, command.length)
     }
 
     render(): string {

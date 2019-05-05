@@ -8,20 +8,20 @@ import { ParseError } from '../parse-error';
 
 
 export class Commands {
-    static commands: { [key: string]: { new(tokenizer:Tokenizer, context: PlotContext): Command } } = {
+    static commands: { [key: string]: { new(tokenizer:Tokenizer): Command } } = {
         'set': SetCommand,
         'plot': PlotCommand
     }
 
-    static createCommand(tokenizer:Tokenizer, context: PlotContext): Command  {
+    static createCommand(tokenizer:Tokenizer): Command  {
         tokenizer.reset()
         let first = tokenizer.current()
         let ctor = this.commands[first.text]
         if(ctor){
             tokenizer.forward()
-            return new ctor(tokenizer, context)
+            return new ctor(tokenizer)
         }else{
-            throw ParseError.formToken(tokenizer.getOrigin(), first, `no such command -  ${first.text}`)
+            throw ParseError.byToken(tokenizer.getOrigin(), first, `no such command -  ${first.text}`)
         }
     }
 }
