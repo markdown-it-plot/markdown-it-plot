@@ -6,6 +6,10 @@ import { values } from "d3";
 
 let bool2int = (b: boolean | number) => b ? 1 : 0
 
+class Helper {
+    call_trigonometric_function(fun: Function) { }
+}
+
 
 let builtinTable: any = {
     push: (e: EvalContext, arg: Argument) => {
@@ -314,41 +318,129 @@ let builtinTable: any = {
         }
         e.push(v)
     },
-    cos: (e: EvalContext, arg: Argument) => { },
-    tan: (e: EvalContext, arg: Argument) => { },
-    asin: (e: EvalContext, arg: Argument) => { },
-    acos: (e: EvalContext, arg: Argument) => { },
-    atan: (e: EvalContext, arg: Argument) => { },
-    atan2: (e: EvalContext, arg: Argument) => { },
-    sinh: (e: EvalContext, arg: Argument) => { },
-    cosh: (e: EvalContext, arg: Argument) => { },
-    tanh: (e: EvalContext, arg: Argument) => {
-
+    cos: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.cos(v.num_v)
+        } else {
+            throw `unsupport type for operator sin: ${JSON.stringify(v)}`
+        }
+        e.push(v)
     },
-    asinh: (e: EvalContext, arg: Argument) => { },
-    acosh: (e: EvalContext, arg: Argument) => { },
-    atanh: (e: EvalContext, arg: Argument) => { },
-    ellip_first: (e: EvalContext, arg: Argument) => { },
-    ellip_second: (e: EvalContext, arg: Argument) => { },
-    ellip_third: (e: EvalContext, arg: Argument) => { },
-    int: (e: EvalContext, arg: Argument) => { },
-    abs: (e: EvalContext, arg: Argument) => { },
-    sgn: (e: EvalContext, arg: Argument) => { },
-    sqrt: (e: EvalContext, arg: Argument) => { },
-    exp: (e: EvalContext, arg: Argument) => { },
-    log10: (e: EvalContext, arg: Argument) => { },
-    log: (e: EvalContext, arg: Argument) => { },
-    floor: (e: EvalContext, arg: Argument) => { },
-    ceil: (e: EvalContext, arg: Argument) => { },
-    exists: (e: EvalContext, arg: Argument) => { },
-    besi0: (e: EvalContext, arg: Argument) => { },
-    besi1: (e: EvalContext, arg: Argument) => { },
-    besj0: (e: EvalContext, arg: Argument) => { },
-    besj1: (e: EvalContext, arg: Argument) => { },
-    besy0: (e: EvalContext, arg: Argument) => { },
-    besy1: (e: EvalContext, arg: Argument) => { },
-    besjn: (e: EvalContext, arg: Argument) => { },
-    besyn: (e: EvalContext, arg: Argument) => { },
+    tan: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.tan(v.num_v)
+        } else {
+            throw `unsupport type for operator tan: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    asin: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.asin(v.num_v)
+        } else {
+            throw `unsupport type for operator asin: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    acos: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.acos(v.num_v)
+        } else {
+            throw `unsupport type for operator acos: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    atan: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.atan(v.num_v)
+        } else {
+            throw `unsupport type for operator atan: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    atan2: (e: EvalContext, arg: Argument) => {
+        
+    },
+    sinh: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.sinh(v.num_v)
+        } else {
+            throw `unsupport type for operator sinh: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    cosh: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.cosh(v.num_v)
+        } else {
+            throw `unsupport type for operator cosh: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    tanh: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.tanh(v.num_v)
+        } else {
+            throw `unsupport type for operator tanh: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    asinh: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.asinh(v.num_v)
+        } else {
+            throw `unsupport type for operator asinh: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    acosh: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.acosh(v.num_v)
+        } else {
+            throw `unsupport type for operator acosh: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    atanh: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.atanh(v.num_v)
+        } else {
+            throw `unsupport type for operator atanh: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    ellip_first: (e: EvalContext, arg: Argument) => {},
+    ellip_second: (e: EvalContext, arg: Argument) => {},
+    ellip_third: (e: EvalContext, arg: Argument) => {},
+    int: (e: EvalContext, arg: Argument) => {},
+    abs: (e: EvalContext, arg: Argument) => {},
+    sgn: (e: EvalContext, arg: Argument) => {},
+    sqrt: (e: EvalContext, arg: Argument) => {},
+    exp: (e: EvalContext, arg: Argument) => {},
+    log10: (e: EvalContext, arg: Argument) => {},
+    log: (e: EvalContext, arg: Argument) => {},
+    floor: (e: EvalContext, arg: Argument) => {},
+    ceil: (e: EvalContext, arg: Argument) => {},
+    exists: (e: EvalContext, arg: Argument) => {},
+    besi0: (e: EvalContext, arg: Argument) => {},
+    besi1: (e: EvalContext, arg: Argument) => {},
+    besj0: (e: EvalContext, arg: Argument) => {},
+    besj1: (e: EvalContext, arg: Argument) => {},
+    besy0: (e: EvalContext, arg: Argument) => {},
+    besy1: (e: EvalContext, arg: Argument) => {},
+    besjn: (e: EvalContext, arg: Argument) => {},
+    besyn: (e: EvalContext, arg: Argument) => {},
 
 }
 
