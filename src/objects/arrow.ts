@@ -2,7 +2,7 @@ import { Tokenizer } from "../tokenizer";
 import { Point, PointParser } from "../graph";
 import { ParseError } from "../parse-error";
 
-enum ArrowEndType {
+export enum ArrowEndType {
     Absolute,
     Relative,
     Oriented,
