@@ -15,3 +15,13 @@ export class Axis {
     tockMode:number;
     */
 }
+
+export class AxisRange {
+    constructor(init?: AxisRange) {
+        init && Object.assign(this, init)
+    }
+    upper?: number
+    autoUpper?: boolean = true;
+    lower?: number
+    autoLower?: boolean = true
+}

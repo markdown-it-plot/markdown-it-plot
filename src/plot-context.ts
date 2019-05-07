@@ -1,8 +1,8 @@
 import { PlotObject } from "./objects/plot-object";
 import { UDV, UDF } from "./tokenizer";
-import { map } from "d3";
 import { ExpressionObject } from "./objects/expression-object";
 import { ArrowObject } from "./objects/arrow";
+import { AxisRange } from "./axis";
 
 export class PlotContext {
 
@@ -18,12 +18,12 @@ export class PlotContext {
     y1Label: string
     x2Label: string
     y2Label: string
-    x1Range: number[]
-    x2Range: number[]
-    y1Range: number[]
-    y2Range: number[]
-    dummies: string[] = ['x']
+    x1Range: AxisRange = new AxisRange({ lower: -10, upper: 10 })
+    x2Range: AxisRange = new AxisRange({ lower: -10, upper: 10 })
+    y1Range: AxisRange = new AxisRange({ lower: Number.POSITIVE_INFINITY, upper: Number.NEGATIVE_INFINITY })
+    y2Range: AxisRange = new AxisRange({ lower: -10, upper: 10 })
     udfTable: Map<string, UDF> = new Map<string, UDF>()
+    dummies: string[] = ['x']
     udvTable: Map<string, UDV> = new Map<string, UDV>()
     objects = {
         expression: new Array<ExpressionObject>(),
@@ -31,7 +31,7 @@ export class PlotContext {
         shapes: new Array<PlotObject>()
     }
 
-    
+
 
 
     image: any

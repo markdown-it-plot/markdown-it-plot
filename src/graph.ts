@@ -3,9 +3,12 @@ import { TokenUtil } from "./utils";
 import { ParseError } from "./parse-error";
 
 export class Point {
+    constructor(init?:Point){
+        init && Object.assign(this,init)
+    }
     x: number = 0
     y: number = 0
-    z: number = 0
+    z?: number = 0
 
 }
 
