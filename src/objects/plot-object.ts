@@ -12,7 +12,8 @@ export class RectangleObject implements PlotObject {
 }
 
 export class EllipseObject implements PlotObject {
-
+    cneter: Point
+    size: Point
 }
 
 export class CircleObject implements PlotObject {

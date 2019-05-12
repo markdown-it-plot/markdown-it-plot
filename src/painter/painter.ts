@@ -6,7 +6,7 @@ import { LineStyles } from "../styles";
 import { Colors } from "../colors";
 import { ArrowObject, ArrowEndType } from "../objects/arrow";
 import { Point } from "../graph";
-import { PlotObject, RectangleObject, CircleObject } from "../objects/plot-object";
+import { PlotObject, RectangleObject, CircleObject, EllipseObject } from "../objects/plot-object";
 let linspace = require('linspace')
 
 export interface Painter {
@@ -109,13 +109,22 @@ export class SVGPainter implements Painter {
                     .attr('width', width)
                     .attr('height', height)
                     .attr('stroke', 'black').attr('fill', 'none');
+            } else if (s instanceof EllipseObject) {
+                let ellipse = s as EllipseObject
+                let cx = this.x1axis.scale()(ellipse.cneter.x)
+                let cy = this.y1axis.scale()(ellipse.cneter.y)
+                let rx = this.x1axis.scale()(ellipse.size.x) - this.x1axis.scale()(0)
+                let ry = this.x1axis.scale()(ellipse.size.y) - this.x1axis.scale()(0)
+                this.$canvas.append('g').append('ellipse')
+                    .attr('cx', cx).attr('cy', cy).attr('rx', rx).attr('ry', ry)
+                    .attr('stroke', 'black').attr('fill', 'none');
             } else if (s instanceof CircleObject) {
                 let circle = s as CircleObject
                 let cx = this.x1axis.scale()(circle.cneter.x)
                 let cy = this.y1axis.scale()(circle.cneter.y)
                 let r = this.x1axis.scale()(circle.radius) - this.x1axis.scale()(0)
                 this.$canvas.append('g').append('circle')
-                    .attr('cx', cx).attr('cy',cy).attr('r',r)
+                    .attr('cx', cx).attr('cy', cy).attr('r', r)
                     .attr('stroke', 'black').attr('fill', 'none');
             }
         })

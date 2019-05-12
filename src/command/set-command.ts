@@ -5,7 +5,7 @@ import { ParseError } from "../parse-error";
 import { ArrowParse } from "../objects/arrow";
 import { TokenUtil } from "../utils";
 import { Point, PointParser } from "../graph";
-import { RectangleObject, CircleObject } from "../objects/plot-object";
+import { RectangleObject, CircleObject, EllipseObject } from "../objects/plot-object";
 
 export class SetCommand implements Command {
 
@@ -81,18 +81,20 @@ export class SetCommand implements Command {
         return obj
     }
     parseEllipseObject(): any {
+        let obj = new EllipseObject
         if (this.tokenizer.checkEquals('at') || this.tokenizer.checkEquals('center')) {
             this.tokenizer.forward()
-            PointParser.parse(this.tokenizer)
+            obj.cneter = PointParser.parse(this.tokenizer)
             if (this.tokenizer.checkEquals('size')) {
                 this.tokenizer.forward()
-                PointParser.parse(this.tokenizer)
+                obj.size = PointParser.parse(this.tokenizer)
             } else {
                 throw ParseError.byCurrentToken(this.tokenizer, 'Expecting `size`')
             }
         } else {
             throw ParseError.byCurrentToken(this.tokenizer, 'Expecting `at` or `center`')
         }
+        return obj
 
     }
     parseRectObject(): RectangleObject {
