@@ -5,7 +5,7 @@ import { ParseError } from "../parse-error";
 import { ArrowParse } from "../objects/arrow";
 import { TokenUtil } from "../utils";
 import { Point, PointParser } from "../graph";
-import { RectangleObject } from "../objects/plot-object";
+import { RectangleObject, CircleObject } from "../objects/plot-object";
 
 export class SetCommand implements Command {
 
@@ -41,8 +41,10 @@ export class SetCommand implements Command {
                 obj = this.parseRectObject()
             } else if (this.tokenizer.checkEquals('ellipse')) {
                 this.tokenizer.forward()
+                obj = this.parseEllipseObject()
             } else if (this.tokenizer.checkEquals('circle')) {
                 this.tokenizer.forward()
+                obj = this.parseCircle()
             } else if (this.tokenizer.checkEquals('polygon')) {
                 this.tokenizer.forward()
             }
@@ -55,6 +57,42 @@ export class SetCommand implements Command {
             throw ParseError.byCurrentToken(this.tokenizer, 'unexpected token!')
         }
 
+
+    }
+    parseCircle() {
+        let obj = new CircleObject
+        if (this.tokenizer.checkEquals('at') || this.tokenizer.checkEquals('center')) {
+            this.tokenizer.forward()
+            obj.cneter = PointParser.parse(this.tokenizer)
+            if (this.tokenizer.checkEquals('size')) {
+                this.tokenizer.forward()
+                if (this.tokenizer.check(TokenUtil.isFloat)) {
+                    obj.radius = this.tokenizer.current().value.num_v
+                    this.tokenizer.forward()
+                } else {
+                    throw ParseError.byCurrentToken(this.tokenizer, 'Expecting a number for radius')
+                }
+            } else {
+                throw ParseError.byCurrentToken(this.tokenizer, 'Expecting `size`')
+            }
+        } else {
+            throw ParseError.byCurrentToken(this.tokenizer, 'Expecting `at` or `center`')
+        }
+        return obj
+    }
+    parseEllipseObject(): any {
+        if (this.tokenizer.checkEquals('at') || this.tokenizer.checkEquals('center')) {
+            this.tokenizer.forward()
+            PointParser.parse(this.tokenizer)
+            if (this.tokenizer.checkEquals('size')) {
+                this.tokenizer.forward()
+                PointParser.parse(this.tokenizer)
+            } else {
+                throw ParseError.byCurrentToken(this.tokenizer, 'Expecting `size`')
+            }
+        } else {
+            throw ParseError.byCurrentToken(this.tokenizer, 'Expecting `at` or `center`')
+        }
 
     }
     parseRectObject(): RectangleObject {

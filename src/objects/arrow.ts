@@ -11,8 +11,8 @@ export enum ArrowEndType {
 
 export class ArrowObject {
     tag: number
-    start: Point
-    end: Point
+    start: Point = new Point
+    end: Point = new Point
     type: ArrowEndType
 }
 

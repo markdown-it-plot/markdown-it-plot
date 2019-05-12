@@ -6,7 +6,7 @@ import { LineStyles } from "../styles";
 import { Colors } from "../colors";
 import { ArrowObject, ArrowEndType } from "../objects/arrow";
 import { Point } from "../graph";
-import { PlotObject, RectangleObject } from "../objects/plot-object";
+import { PlotObject, RectangleObject, CircleObject } from "../objects/plot-object";
 let linspace = require('linspace')
 
 export interface Painter {
@@ -73,14 +73,14 @@ export class SVGPainter implements Painter {
         this.y1axis = d3.axisLeft(y1scale).tickSize(-Number.parseInt(this.$canvas.attr('width')))
         this.$canvas.append("g").attr('class', 'grid').attr("transform", `translate(0,${this.$canvas.attr('height')})`)
             .call(this.x1axis)
-        this.$canvas.append("g").attr('class', 'grid').attr("transform", `translate(0,0))`)
+        this.$canvas.append("g").attr('class', 'grid').attr("transform", `translate(0,0)`)
             .call(this.y1axis)
 
         // no grid
         //this.x1axis = d3.axisBottom(d3.scaleLinear().domain([-10, 10]).range([0, Number.parseInt(this.$canvas.attr('width'))]))
         //this.y1axis = d3.axisLeft(d3.scaleLinear().domain([10, -10]).range([0, Number.parseInt(this.$canvas.attr('height'))]))
         // this.$canvas.append("g").attr("transform", `translate(0,${this.$canvas.attr('height')})`).call(this.x1axis)
-        // this.$canvas.append("g").attr("transform", `translate(0,0))`).call(this.y1axis)
+        // this.$canvas.append("g").attr("transform", `translate(0,0)`).call(this.y1axis)
     }
 
     paintObjects() {
@@ -93,6 +93,7 @@ export class SVGPainter implements Painter {
 
     paintShapes(shapes: PlotObject[]) {
         shapes.forEach(s => {
+            console.info(s)
             if (s instanceof RectangleObject) {
                 let rect = s as RectangleObject
                 let x = this.x1axis.scale()(rect.x)
@@ -107,6 +108,14 @@ export class SVGPainter implements Painter {
                     .attr('x', x).attr('y', y)
                     .attr('width', width)
                     .attr('height', height)
+                    .attr('stroke', 'black').attr('fill', 'none');
+            } else if (s instanceof CircleObject) {
+                let circle = s as CircleObject
+                let cx = this.x1axis.scale()(circle.cneter.x)
+                let cy = this.y1axis.scale()(circle.cneter.y)
+                let r = this.x1axis.scale()(circle.radius) - this.x1axis.scale()(0)
+                this.$canvas.append('g').append('circle')
+                    .attr('cx', cx).attr('cy',cy).attr('r',r)
                     .attr('stroke', 'black').attr('fill', 'none');
             }
         })
@@ -138,6 +147,7 @@ export class SVGPainter implements Painter {
             let $line = this.$canvas.append('g').append('line').attr('stroke', Colors.get('black'))
                 .attr('x1', this.x1axis.scale()(a.start.x)).attr('y1', this.y1axis.scale()(a.start.y))
                 .attr('marker-end', 'url(#arrow)')
+            console.info(a)
             if (a.type == ArrowEndType.Absolute) {
                 $line.attr('x2', this.x1axis.scale()(a.end.x)).attr('y2', this.y1axis.scale()(a.end.y))
             } else if (a.type == ArrowEndType.Relative) {
