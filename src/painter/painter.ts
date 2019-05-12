@@ -6,6 +6,7 @@ import { LineStyles } from "../styles";
 import { Colors } from "../colors";
 import { ArrowObject, ArrowEndType } from "../objects/arrow";
 import { Point } from "../graph";
+import { PlotObject, RectangleObject } from "../objects/plot-object";
 let linspace = require('linspace')
 
 export interface Painter {
@@ -85,8 +86,30 @@ export class SVGPainter implements Painter {
     paintObjects() {
         let objects = PlotContext.get().objects
         this.paintArrows(objects.arrow)
+        this.paintShapes(objects.shapes)
         LineStyles.reset()
         objects.expression.forEach(o => this.paintExpression(o))
+    }
+
+    paintShapes(shapes: PlotObject[]) {
+        shapes.forEach(s => {
+            if (s instanceof RectangleObject) {
+                let rect = s as RectangleObject
+                let x = this.x1axis.scale()(rect.x)
+                let y = this.y1axis.scale()(rect.y)
+                let width = this.x1axis.scale()(rect.x + rect.width) - x
+                let height = this.y1axis.scale()(rect.y + rect.height) - y
+                x = width >= 0 ? x : x + width
+                y = height >= 0 ? y : y + height
+                width = Math.abs(width)
+                height = Math.abs(height)
+                this.$canvas.append('g').append('rect')
+                    .attr('x', x).attr('y', y)
+                    .attr('width', width)
+                    .attr('height', height)
+                    .attr('stroke', 'black').attr('fill', 'none');
+            }
+        })
     }
 
     paintExpression(obj: ExpressionObject) {
@@ -100,7 +123,7 @@ export class SVGPainter implements Painter {
             })
             .curve(d3.curveBasis)
         let color = Colors.get(LineStyles.next().color);
-        this.$canvas.append('path').attr('d', gen(samples)).attr('stroke', color).attr('fill', 'none')
+        this.$canvas.append('g').append('path').attr('d', gen(samples)).attr('stroke', color).attr('fill', 'none')
     }
 
     paintArrows(arrows: ArrowObject[]) {
@@ -112,14 +135,14 @@ export class SVGPainter implements Painter {
             $arrowMarker.append('path').attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2').attr('style', 'fill: #000000;')
         }
         arrows.forEach(a => {
-            let $line = this.$canvas.append('line').attr('stroke', Colors.get('black'))
+            let $line = this.$canvas.append('g').append('line').attr('stroke', Colors.get('black'))
                 .attr('x1', this.x1axis.scale()(a.start.x)).attr('y1', this.y1axis.scale()(a.start.y))
                 .attr('marker-end', 'url(#arrow)')
             if (a.type == ArrowEndType.Absolute) {
                 $line.attr('x2', this.x1axis.scale()(a.end.x)).attr('y2', this.y1axis.scale()(a.end.y))
             } else if (a.type == ArrowEndType.Relative) {
                 $line.attr('x2', this.x1axis.scale()(a.start.x + a.end.x)).attr('y2', this.y1axis.scale()(a.start.y + a.end.y))
-            }else if(a.type == ArrowEndType.Oriented){
+            } else if (a.type == ArrowEndType.Oriented) {
                 throw "unsuppot oriented arrow now!!"
             }
         })
