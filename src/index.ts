@@ -1,72 +1,71 @@
-// import * as MarkdownIt from "markdown-it"
-// import { PlotContext } from "./plot-context";
-// import { JSDOM } from "jsdom";
-// import { Tokenizer } from "./tokenizer";
-// import { Commands } from "./command/commands";
-// import * as d3 from "d3"
+import * as MarkdownIt from "markdown-it"
+import { PlotContext } from "./plot-context";
+import { Tokenizer } from "./tokenizer";
+import { Commands } from "./command/commands";
+import * as d3 from "d3"
+import { ParseError } from "./parse-error";
 
-// function getLangName(info: string): string {
-//     return info.split(/\s+/g)[0];
-// }
+function getLangName(info: string): string {
+    return info.split(/\s+/g)[0];
+}
 
-// let isNode = Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]';
+function createContainer() {
+    return document.createElement('div')
+}
 
+function render(content: string) {
+    let context = PlotContext.reset()
 
-// if (isNode && !(global as any).HTMLElement) {
-//     (global as any).HTMLElement = new JSDOM().window.HTMLElement
-// }
+    context.terminalOptions = context.terminalOptions || {}
+    context.terminalOptions.container = createContainer()
 
+    try {
+        let lines = (content as string).split(/\r?\n/g)
+            .map(l => l.trim()).filter(l => l)
+            .forEach(l => {
+                context.currentCmd = l
+                let tokenizer = new Tokenizer(l)
+                let cmd = Commands.createCommand(tokenizer)
+                cmd.execute()
+            })
+    } catch (e) {
+        let container = d3.select(context.terminalOptions.container).html("")
+        let box = container.append('div').attr("width", 600).attr("height", 400).attr("style", "backgroud-color:#f2dede; border:#eed3d7 solid 1px; color:#b94a48")
+        if (typeof (e) == "string") {
+            box.append("绘图失败：" + e)
+        } else if (e instanceof ParseError) {
+            box.append('pre').text(e.render())
+        } else {
+            box.append('pre').text(JSON.stringify(e))
+        }
 
-// function createContainer() {
-//     if (isNode) {
-//         let dom = new JSDOM
-//         return dom.window.document.body
-//     } else {
-//         return document.createElement('div')
-//     }
-// }
+    }
 
-// export = function plot_plugin(md: MarkdownIt, options: any) {
+    return context.terminalOptions.container.innerHTML
+}
 
-//     let defaultFenceRenderer = md.renderer.rules.fence;
+let plugin: any = function plot_plugin(md: MarkdownIt, options: any) {
 
-//     function plotRenderer(tokens: any[], idx: number, options: any, env: any, slf: any) {
+    let defaultFenceRenderer = md.renderer.rules.fence;
 
-//         let token = tokens[idx];
-//         let info = token.info.trim();
-//         let lang = info ? getLangName(info) : "";
+    function plotRenderer(tokens: any[], idx: number, options: any, env: any, slf: any) {
 
-//         if (lang == 'plot') {
+        let token = tokens[idx];
+        let info = token.info.trim();
+        let lang = info ? getLangName(info) : "";
 
-//             let context = PlotContext.reset()
-
-//             context.terminalOptions = context.terminalOptions || {}
-//             context.terminalOptions.container = createContainer()
-
-//             try {
-//                 let lines = (token.content as string).split(/\r?\n/g)
-//                     .map(l => l.trim()).filter(l => l)
-//                     .forEach(l => {
-//                         let tokenizer = new Tokenizer(l)
-//                         let cmd = Commands.createCommand(tokenizer, context)
-//                         cmd.execute(tokenizer, context)
-//                     })
-//             } catch (e) {
-//                 let $svg = d3.select(context.terminalOptions.container)
-//                     .append('svg').attr('xmlns', 'http://www.w3.org/2000/svg').attr("width", 600).attr("height", 400).attr("fill", "#f2dede").attr("stroke", "#eed3d7")
-//                 $svg.append("g").attr("x", 50).attr("y", 50).attr("width", 500).attr("height", 300)
-//                     .append('text').text("绘图失败").style("color:#b94a48")
-
-//             }
-
-//             return context.terminalOptions.container.innerHTML
-
-//         } else {
-//             return defaultFenceRenderer(tokens, idx, options, env, slf);
-//         }
-//     }
+        if (lang == 'plot') {
+            return render(token.content)
+        } else {
+            return defaultFenceRenderer(tokens, idx, options, env, slf);
+        }
+    }
 
 
-//     md.renderer.rules.fence = plotRenderer;
-// }
+    md.renderer.rules.fence = plotRenderer;
+}
+
+plugin.render = render
+
+export = plugin
 

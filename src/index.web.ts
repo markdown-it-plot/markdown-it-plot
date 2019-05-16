@@ -48,7 +48,6 @@ export = function plot_plugin(md: MarkdownIt, options: any) {
                     box.append('pre').text(e.render())
                 } else {
                     box.append('pre').text(JSON.stringify(e))
-                    throw e;
                 }
 
             }

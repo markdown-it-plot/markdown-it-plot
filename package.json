@@ -9,7 +9,7 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "build-browser": "tsc && browserify -e lib/index.web.js -o dist/markdown-it-plot.js -s markdownItPlot",
+    "build-browser": "tsc && browserify -e lib/index.js -o dist/markdown-it-plot.js -s markdownItPlot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -24,12 +24,14 @@ export class SVGPainter implements Painter {
     axisMargin = 20
 
     constructor(private container: HTMLElement) {
+        let context = PlotContext.get()
         this.$svg = d3.select(container).append('svg')
             .attr('xmlns', 'http://www.w3.org/2000/svg')
+            .attr('width', context.width).attr('height', context.height)
+            .attr('viewBox', `0 0 ${context.width} ${context.height}`)
     }
 
     paint(context: PlotContext) {
-        this.$svg.attr('width', context.width).attr('height', context.height)
         this.initCanvas(context)
         this.sampleExpressions()
         this.initAxises()
@@ -58,9 +60,12 @@ export class SVGPainter implements Painter {
     }
 
     initCanvas(context: PlotContext) {
+        let width = context.width - 2 * this.canvasMargin
+        let height = context.height - 2 * this.canvasMargin
         this.$canvas = this.$svg.append('g').attr('class', 'canvas')
-            .attr('width', context.width - 2 * this.canvasMargin)
-            .attr('height', context.height - 2 * this.canvasMargin)
+            .attr('width', width)
+            .attr('height', height)
+            .attr('viewBox', `0 0 ${width} ${height}`)
             .attr("transform", `translate(${this.canvasMargin},${this.canvasMargin})`)
     }
 
@@ -131,7 +136,8 @@ export class SVGPainter implements Painter {
     }
 
     paintExpression(obj: ExpressionObject) {
-        let samples = linspace(-10, 10, 500)
+        let context = PlotContext.get()
+        let samples = linspace(context.x1Range.lower, context.x1Range.upper, 500)
         let gen = d3.line<number>()
             .x((d) => this.x1axis.scale()(d))
             .y((d) => {
