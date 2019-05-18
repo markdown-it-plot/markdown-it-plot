@@ -10,14 +10,15 @@ function getLangName(info: string): string {
 }
 
 function createContainer() {
-    return document.createElement('div')
+    return d3.create('div').node()
+    //return document.createElement('div')
 }
 
 function render(content: string) {
     let context = PlotContext.reset()
 
     context.terminalOptions = context.terminalOptions || {}
-    context.terminalOptions.container = createContainer()
+    context.terminalOptions.container =  createContainer()
 
     try {
         let lines = (content as string).split(/\r?\n/g)
@@ -32,10 +33,12 @@ function render(content: string) {
         let container = d3.select(context.terminalOptions.container).html("")
         let box = container.append('div').attr("width", 600).attr("height", 400).attr("style", "backgroud-color:#f2dede; border:#eed3d7 solid 1px; color:#b94a48")
         if (typeof (e) == "string") {
-            box.append("绘图失败：" + e)
+            box.append('pre').text("plot failure: " + e)
         } else if (e instanceof ParseError) {
             box.append('pre').text(e.render())
-        } else {
+        } else if(e instanceof Error){
+            box.append('pre').text(e.stack)
+        }else{
             box.append('pre').text(JSON.stringify(e))
         }
 
@@ -44,11 +47,18 @@ function render(content: string) {
     return context.terminalOptions.container.innerHTML
 }
 
-let plugin: any = function plot_plugin(md: MarkdownIt, options: any) {
+let plugin: any = function plot_plugin(md: MarkdownIt, opt: any) {
+
+    console.info('before prepare')
+    console.info(document)
+    opt.prepare || opt.prepare()
+    console.info('after prepare')
+    console.info(document)
 
     let defaultFenceRenderer = md.renderer.rules.fence;
 
     function plotRenderer(tokens: any[], idx: number, options: any, env: any, slf: any) {
+
 
         let token = tokens[idx];
         let info = token.info.trim();

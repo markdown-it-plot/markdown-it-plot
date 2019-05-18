@@ -15,7 +15,7 @@ let builtinTable: any = {
     push: (e: EvalContext, arg: Argument) => {
 
         if (arg.udv && arg.udv.value.type == ValueType.NOTDEFINDED) {
-            throw "push udv  not support yet"
+            throw "push udv not support yet"
         }
         e.push(arg.udv.value)
 

@@ -48,14 +48,14 @@ export class PlotCommand implements Command {
         }
 
         this.parseBoundary(range, 'lower', defaultRange)
-        if (!this.tokenizer.checkEquals(':') && !this.tokenizer.checkEquals('to')) {
-            throw ParseError.byCurrentToken(this.tokenizer, 'range upper expected')
-        }
-        this.tokenizer.forward()
 
-        if (!this.tokenizer.checkEquals(']')) {
-            this.parseBoundary(range, 'upper', defaultRange)
+        if (this.tokenizer.checkEquals(':') || this.tokenizer.checkEquals('to')) {
+            this.tokenizer.forward()
+            if (!this.tokenizer.checkEquals(']')) {
+                this.parseBoundary(range, 'upper', defaultRange)
+            }
         }
+
 
         if (!this.tokenizer.checkEquals(']')) {
             throw ParseError.byCurrentToken(this.tokenizer, '] expected')
@@ -80,7 +80,7 @@ export class PlotCommand implements Command {
                 range.upper = defaultRange[1]
             }
             this.tokenizer.forward()
-        }else {
+        } else {
             let exp = new ExpressionParser(this.tokenizer, new UDF({ name: "", dummies: [] })).parse()
             let v = exp.eval([])
             if (boundary == 'lower') {

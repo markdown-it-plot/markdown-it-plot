@@ -19,7 +19,7 @@ export class SVGTerminal implements Terminal {
         if (container instanceof HTMLElement) {
             return new SVGPainter(container)
         } else {
-            throw new Error(`unknow terminal - ${context.terminalOptions.container}`)
+            throw new Error(`unknow terminal container- ${context.terminalOptions.container}`)
         }
     }
 
