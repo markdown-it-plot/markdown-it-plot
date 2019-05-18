@@ -2,4 +2,6 @@ dist
 lib
 node_modules
 types
+*.tgzgit status
+
 *.tgz

@@ -16,11 +16,11 @@ const config = {
         umdNamedDefine: true
     },
     devtool: 'source-map',
-    externals: {
-        vscode: 'd3 jsdom canvas',
-        d3:'d3',
-        jsdom:'jsdom'
-    },
+    // externals: {
+    //     vscode: 'd3 jsdom canvas',
+    //     d3:'d3',
+    //     jsdom:'jsdom'
+    // },
     resolve: {
         extensions: ['.ts', '.js']
     },

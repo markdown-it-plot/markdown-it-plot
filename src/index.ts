@@ -10,7 +10,7 @@ function getLangName(info: string): string {
 }
 
 function createContainer() {
-    return d3.create('div').node()
+    return d3.create('div').attr('style', 'background-color:white').node()
     //return document.createElement('div')
 }
 
@@ -49,11 +49,7 @@ function render(content: string) {
 
 let plugin: any = function plot_plugin(md: MarkdownIt, opt: any) {
 
-    console.info('before prepare')
-    console.info(document)
-    opt.prepare || opt.prepare()
-    console.info('after prepare')
-    console.info(document)
+    opt && opt.prepare && opt.prepare()
 
     let defaultFenceRenderer = md.renderer.rules.fence;
 
