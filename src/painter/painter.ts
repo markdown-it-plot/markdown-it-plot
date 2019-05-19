@@ -28,6 +28,7 @@ export class SVGPainter implements Painter {
         this.$svg = d3.select(container).append('svg')
             .attr('xmlns', 'http://www.w3.org/2000/svg')
             .attr('width', context.width).attr('height', context.height)
+            .attr('style','background:white')
             .attr('viewBox', `0 0 ${context.width} ${context.height}`)
     }
 

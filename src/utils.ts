@@ -34,7 +34,7 @@ export class AlphaUtil {
     }
 
     static isIdent(char: string) {
-        return this.isAlpha(char) || char == '_'
+        return this.isAlpha(char) ||  this.isDigit(char) || char == '_'
     }
 
     static isDigit(char: string) {

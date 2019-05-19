@@ -24,14 +24,15 @@ let builtinTable: any = {
         e.push(arg.value)
     },
     pushd1: (e: EvalContext, arg: Argument) => {
-        e.push(e.dummyValues[0])
+        let dummy = e.dummyValues[0]
+        e.push( new Value(dummy))
     },
     pushd2: (e: EvalContext, arg: Argument) => {
-        e.push(e.dummyValues[1])
+        e.push(new Value(e.dummyValues[1]))
     },
     pushd: (e: EvalContext, arg: Argument) => {
         let value = e.pop()
-        e.push(e.dummyValues[value.num_v])
+        e.push(new Value(e.dummyValues[value.num_v]))
     },
     pop: (e: EvalContext, arg: Argument) => {
         e.pop()
@@ -210,11 +211,11 @@ let builtinTable: any = {
                     result.type = (a.type == b.type && a.type == ValueType.INTGR) ? ValueType.INTGR : ValueType.FLOAT
                 }
                 else {
-                    throw "unsupport cmplex number for plus operator yet"
+                    throw "unsupport cmplex number for minus operator yet"
                 }
                 break;
             default:
-                throw "unsupport cmplex number for plus operator yet"
+                throw "unsupport cmplex number for minus operator yet"
         }
         e.push(result)
     },
@@ -424,14 +425,62 @@ let builtinTable: any = {
     ellip_second: (e: EvalContext, arg: Argument) => {},
     ellip_third: (e: EvalContext, arg: Argument) => {},
     int: (e: EvalContext, arg: Argument) => {},
-    abs: (e: EvalContext, arg: Argument) => {},
+    abs: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.abs(v.num_v)
+        } else {
+            throw `unsupport type for operator abs: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
     sgn: (e: EvalContext, arg: Argument) => {},
-    sqrt: (e: EvalContext, arg: Argument) => {},
+    sqrt: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.sqrt(v.num_v)
+        } else {
+            throw `unsupport type for operator sqrt: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
     exp: (e: EvalContext, arg: Argument) => {},
-    log10: (e: EvalContext, arg: Argument) => {},
-    log: (e: EvalContext, arg: Argument) => {},
-    floor: (e: EvalContext, arg: Argument) => {},
-    ceil: (e: EvalContext, arg: Argument) => {},
+    log10: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.log10(v.num_v)
+        } else {
+            throw `unsupport type for operator log10: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    log: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.log(v.num_v)
+        } else {
+            throw `unsupport type for operator log: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    floor: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.floor(v.num_v)
+        } else {
+            throw `unsupport type for operator floor: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
+    ceil: (e: EvalContext, arg: Argument) => {
+        let v = e.pop()
+        if (ValueUtil.ifRealNumber(v)) {
+            v.num_v = Math.ceil(v.num_v)
+        } else {
+            throw `unsupport type for operator ceil: ${JSON.stringify(v)}`
+        }
+        e.push(v)
+    },
     exists: (e: EvalContext, arg: Argument) => {},
     besi0: (e: EvalContext, arg: Argument) => {},
     besi1: (e: EvalContext, arg: Argument) => {},
