@@ -51,6 +51,16 @@ plot sin(x)
         </div>
         <div class="result"></div>
     </div>
+    <div class="row">
+        <div class="input-wrapper">
+            <textarea class="markdown" cols="100" rows="20">```plot
+set point A 1,1
+set point B 2,3
+plot x/2
+```</textarea>
+        </div>
+        <div class="result"></div>
+    </div>
     <script>
         var markdown = window.markdownit().use(markdownItPlot);
         $('.row').each((e, d) => {

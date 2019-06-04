@@ -7,6 +7,7 @@ import { Colors } from "../colors";
 import { ArrowObject, ArrowEndType } from "../objects/arrow";
 import { Point } from "../graph";
 import { PlotObject, RectangleObject, CircleObject, EllipseObject } from "../objects/plot-object";
+import { PointObject } from "../objects/point-object";
 let linspace = require('linspace')
 
 export interface Painter {
@@ -28,7 +29,7 @@ export class SVGPainter implements Painter {
         this.$svg = d3.select(container).append('svg')
             .attr('xmlns', 'http://www.w3.org/2000/svg')
             .attr('width', context.width).attr('height', context.height)
-            .attr('style','background:white')
+            .attr('style', 'background:white')
             .attr('viewBox', `0 0 ${context.width} ${context.height}`)
     }
 
@@ -91,10 +92,25 @@ export class SVGPainter implements Painter {
 
     paintObjects() {
         let objects = PlotContext.get().objects
+        this.paintPoints(objects.points)
         this.paintArrows(objects.arrow)
         this.paintShapes(objects.shapes)
         LineStyles.reset()
         objects.expression.forEach(o => this.paintExpression(o))
+    }
+
+    paintPoints(points: Map<string, PointObject>) {
+        points.forEach((v, k) => {
+            let cx = this.x1axis.scale()(v.point.x)
+            let cy = this.y1axis.scale()(v.point.y)
+            let r = 3
+            let g = this.$canvas.append('g')
+            g.append('circle')
+                .attr('cx', cx).attr('cy', cy).attr('r', r)
+                .attr('stroke', 'black').attr('fill', 'black')
+
+            g.append("text").attr("x", cx - 20).attr("y", cy ).text(v.tag);
+        })
     }
 
     paintShapes(shapes: PlotObject[]) {

@@ -6,6 +6,7 @@ import { ArrowParse } from "../objects/arrow";
 import { TokenUtil } from "../utils";
 import { Point, PointParser } from "../graph";
 import { RectangleObject, CircleObject, EllipseObject } from "../objects/plot-object";
+import { PointObject } from "../objects/point-object";
 
 export class SetCommand implements Command {
 
@@ -18,8 +19,21 @@ export class SetCommand implements Command {
     }
     execute(): void {
         let context = PlotContext.get()
+        if (this.tokenizer.checkEquals('point')) {
+            this.tokenizer.forward();
+            if (!this.tokenizer.check(TokenUtil.isLetter)) {
+                throw ParseError.byCurrentToken(this.tokenizer, "expect a word!")
+            }
+            let tag = this.tokenizer.currentText()
+            this.tokenizer.forward()
+            let p = PointParser.parse(this.tokenizer)
+            PlotContext.get().objects.points.set(tag, new PointObject({
+                tag: tag,
+                point: p
+            }))
 
-        if (this.tokenizer.checkEquals('arrow')) {
+
+        } else if (this.tokenizer.checkEquals('arrow')) {
             this.tokenizer.forward()
 
             let arrow = ArrowParse.parse(this.tokenizer)

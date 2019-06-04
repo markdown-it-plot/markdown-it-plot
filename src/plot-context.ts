@@ -3,6 +3,7 @@ import { UDV, UDF } from "./tokenizer";
 import { ExpressionObject } from "./objects/expression-object";
 import { ArrowObject } from "./objects/arrow";
 import { AxisRange } from "./axis";
+import { PointObject } from "./objects/point-object";
 
 export class PlotContext {
 
@@ -28,7 +29,8 @@ export class PlotContext {
     objects = {
         expression: new Array<ExpressionObject>(),
         arrow: new Array<ArrowObject>(),
-        shapes: new Array<PlotObject>()
+        shapes: new Array<PlotObject>(),
+        points:  new Map<string, PointObject>()
     }
 
 
