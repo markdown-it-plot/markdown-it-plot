@@ -8,6 +8,9 @@
     "markdown"
   ],
   "main": "lib/index.js",
+  "repository": {
+    "url": "https://github.com/markdown-it-plot/markdown-it-plot"
+  },
   "browserify": {
     "transform": [
       "browserify-shim"
@@ -18,7 +21,9 @@
   },
   "scripts": {
     "build-browser": "tsc && browserify -e lib/index.js -u d3 -o dist/markdown-it-plot.js -s markdownItPlot",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepack": "tsc",
+    "prepublish": "npm version patch -m \"update version to %s\""
   },
   "author": "",
   "license": "ISC",
