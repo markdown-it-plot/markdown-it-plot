@@ -76,18 +76,20 @@ export class SVGPainter implements Painter {
         let x1scale = d3.scaleLinear().domain([context.x1Range.lower, context.x1Range.upper]).range([0, Number.parseInt(this.$canvas.attr('width'))])
         let y1scale = d3.scaleLinear().domain([context.y1Range.upper, context.y1Range.lower]).range([0, Number.parseInt(this.$canvas.attr('height'))])
         //grid
-        this.x1axis = d3.axisBottom(x1scale).tickSize(-Number.parseInt(this.$canvas.attr('height')))
-        this.y1axis = d3.axisLeft(y1scale).tickSize(-Number.parseInt(this.$canvas.attr('width')))
-        this.$canvas.append("g").attr('class', 'grid').attr("transform", `translate(0,${this.$canvas.attr('height')})`)
-            .call(this.x1axis)
-        this.$canvas.append("g").attr('class', 'grid').attr("transform", `translate(0,0)`)
-            .call(this.y1axis)
+        if (context.options.grid) {
+            this.x1axis = d3.axisBottom(x1scale).tickSize(-Number.parseInt(this.$canvas.attr('height')))
+            this.y1axis = d3.axisLeft(y1scale).tickSize(-Number.parseInt(this.$canvas.attr('width')))
+            this.$canvas.append("g").attr('class', 'grid').attr("transform", `translate(0,${this.$canvas.attr('height')})`)
+                .call(this.x1axis)
+            this.$canvas.append("g").attr('class', 'grid').attr("transform", `translate(0,0)`)
+                .call(this.y1axis)
+        } else {
+            this.x1axis = d3.axisBottom(d3.scaleLinear().domain([-10, 10]).range([0, Number.parseInt(this.$canvas.attr('width'))]))
+            this.y1axis = d3.axisLeft(d3.scaleLinear().domain([10, -10]).range([0, Number.parseInt(this.$canvas.attr('height'))]))
+            this.$canvas.append("g").attr("transform", `translate(0,${this.$canvas.attr('height')})`).call(this.x1axis)
+            this.$canvas.append("g").attr("transform", `translate(0,0)`).call(this.y1axis)
+        }
 
-        // no grid
-        //this.x1axis = d3.axisBottom(d3.scaleLinear().domain([-10, 10]).range([0, Number.parseInt(this.$canvas.attr('width'))]))
-        //this.y1axis = d3.axisLeft(d3.scaleLinear().domain([10, -10]).range([0, Number.parseInt(this.$canvas.attr('height'))]))
-        // this.$canvas.append("g").attr("transform", `translate(0,${this.$canvas.attr('height')})`).call(this.x1axis)
-        // this.$canvas.append("g").attr("transform", `translate(0,0)`).call(this.y1axis)
     }
 
     paintObjects() {
@@ -109,7 +111,7 @@ export class SVGPainter implements Painter {
                 .attr('cx', cx).attr('cy', cy).attr('r', r)
                 .attr('stroke', 'black').attr('fill', 'black')
 
-            g.append("text").attr("x", cx - 20).attr("y", cy ).text(v.tag);
+            g.append("text").attr("x", cx - 20).attr("y", cy).text(v.tag);
         })
     }
 

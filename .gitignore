@@ -5,3 +5,4 @@ types
 *.tgzgit status
 
 *.tgz
+package-lock.json

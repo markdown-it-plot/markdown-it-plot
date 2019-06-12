@@ -12,6 +12,10 @@ export class PlotContext {
     terminal = 'svg'
     terminalOptions: any
 
+    options = {
+        grid: true
+    }
+
     title: string
     width = 600
     height = 400
@@ -30,7 +34,7 @@ export class PlotContext {
         expression: new Array<ExpressionObject>(),
         arrow: new Array<ArrowObject>(),
         shapes: new Array<PlotObject>(),
-        points:  new Map<string, PointObject>()
+        points: new Map<string, PointObject>()
     }
 
 

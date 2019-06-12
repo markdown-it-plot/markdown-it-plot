@@ -19,7 +19,23 @@ export class SetCommand implements Command {
     }
     execute(): void {
         let context = PlotContext.get()
-        if (this.tokenizer.checkEquals('point')) {
+        if (this.tokenizer.checkEquals('width')) {
+            this.tokenizer.forward();
+            if(this.tokenizer.check(TokenUtil.isFloat)){
+                context.width = this.tokenizer.current().value.num_v;
+                this.tokenizer.forward()
+            }else{
+                throw ParseError.byCurrentToken(this.tokenizer, "number expected!!")
+            }
+        }else if (this.tokenizer.checkEquals('height')) {
+            this.tokenizer.forward();
+            if(this.tokenizer.check(TokenUtil.isFloat)){
+                context.height = this.tokenizer.current().value.num_v;
+                this.tokenizer.forward()
+            }else{
+                throw ParseError.byCurrentToken(this.tokenizer, "number expected!!")
+            }
+        }else if (this.tokenizer.checkEquals('point')) {
             this.tokenizer.forward();
             if (!this.tokenizer.check(TokenUtil.isLetter)) {
                 throw ParseError.byCurrentToken(this.tokenizer, "expect a word!")
