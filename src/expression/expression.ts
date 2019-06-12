@@ -251,11 +251,11 @@ let builtinTable: any = {
                     result.type = (a.type == b.type && a.type == ValueType.INTGR) ? ValueType.INTGR : ValueType.FLOAT
                 }
                 else {
-                    throw "unsupport cmplex number for plus operator yet"
+                    throw "unsupport cmplex number for div operator yet"
                 }
                 break;
             default:
-                throw "unsupport cmplex number for plus operator yet"
+                throw "unsupport cmplex number for div operator yet"
         }
         e.push(result)
     },
@@ -761,6 +761,8 @@ export class ExpressionParser {
 
             if (!this.tokenizer.checkEquals(')')) {
                 this.throwTokenError(") expected")
+            }else{
+                this.tokenizer.forward()
             }
         }
         // datablock : $xx[] 
