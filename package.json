@@ -23,8 +23,8 @@
     "build-browser": "tsc && browserify -e lib/index.js -u d3 -o dist/markdown-it-plot.js -s markdownItPlot",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepack": "npm run build-browser",
-    "prepublishOnly": "npm version patch -m \"update version to %s\"",
-    "postpublish": "npm version prepatch -m \"update version to %s\""
+    "prepublishOnly": "npm version patch -m \"update version to %s\" && git push --tags",
+    "postpublish": "npm version prerelease -m \"update version to %s\" --preid=alpha --git-tag-version=false"
   },
   "author": "",
   "license": "ISC",
